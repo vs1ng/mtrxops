@@ -39,16 +39,32 @@ void display(int* M, int rc, int cc){
     }
 }
 
-void Multiply(int* A, int* B, int RA, int RB, int CA, int CB){
+void Add(int* A, int* B, int RA, int RB, int CA, int CB){
     int* C = calloc(RA*CB, sizeof( *(A+0+0)));
-    for(int i = 0; i < RA; i++){
+    if(RA==RB){
+        if(CA==CB){
+            puts("A + B defined.");
+        } else {
+            raise(SIGSEGV);
+        }
+    } else {
+        raise(SIGSEGV);
+    }
+    int ROW = RA;
+    int COL = CA;
+    for(int i = 0; i < ROW; i++){
+        for(int j = 0; j < ROW; j++){
+            *(C+i+j) = (int)(*(A+i+j)) + (int)(*(B+i+j));
+        }
+    }
+   /*for(int i = 0; i < RA; i++){
         for(int j = 0; j < CB; j++){
             for(int k = 0; k < CA; k++){
                 *(C+i+j) += (int)(*(A+i+k))*(int)(*(B+k+j));
             }
         }
-    }
-    puts("A x B  = ");
+    }*/
+    puts("A + B  = ");
     display(C+0+0,RA,CB);
     bye(C);
 }
@@ -78,6 +94,6 @@ int main(void){
 
     puts("B:");
     display(&B[0][0],DATA.R.r_b,DATA.C.c_b);
-    Multiply(&A[0][0],&B[0][0],DATA.R.r_a,DATA.R.r_b,DATA.C.c_a,DATA.C.c_b);
+    Add(&A[0][0],&B[0][0],DATA.R.r_a,DATA.R.r_b,DATA.C.c_a,DATA.C.c_b);
     r0;
 }
