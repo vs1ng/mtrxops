@@ -40,7 +40,14 @@ void display(int* M, int rc, int cc){
 }
 
 void Multiply(int* A, int* B, int RA, int RB, int CA, int CB){
+    if(RB!=CA){
+        puts("A x B not defined.");
+        raise(SIGTERM);
+    }
     int* C = calloc(RA*CB, sizeof( *(A+0+0)));
+    if(!C){
+        raise(SIGSEGV);
+    }
     for(int i = 0; i < RA; i++){
         for(int j = 0; j < CB; j++){
             for(int k = 0; k < CA; k++){
