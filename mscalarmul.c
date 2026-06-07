@@ -42,9 +42,9 @@ void display(int* M, int rc, int cc){
 void ScalarMul(int K, int* A, int RA, int CA){
     for(int i = 0; i < RA; i++){
         for(int j = 0; j < CA; j++){
-            printf("value at (%i,%i) before mul with %i\n",i,j,K);
+            printf("value at (%i,%i) before mul with %i : %i\n",i,j,K,*(A+i+j));
             *(A+i+j) = K*(int)(*(A+i+j));
-            printf("value at (%i,%i) after  mul with %i\n",i,j,K);
+            printf("value at (%i,%i) after  mul with %i : %i\n",i,j,K,*(A+i+j));
         }
     }
     printf(" %i(A) = \n",K);
@@ -60,20 +60,12 @@ int main(void){
                     {3,4}
     };
 
-    int B[2][2] = {
-                    {4,5},
-                    {6,7}
-    };
 
     DATA.R.r_a = (int)(sizeof(A)/sizeof(A[0]));
     DATA.C.c_a = (int)(sizeof(A[0])/sizeof(A[0][0]));
-    
-    DATA.R.r_b = (int)(sizeof(B)/sizeof(B[0]));
-    DATA.C.c_b = (int)(sizeof(B[0])/sizeof(B[0][0]));
 
     puts("A:");
     display(&A[0][0],DATA.R.r_a,DATA.C.c_a);
-    
     ScalarMul(3,&A[0][0],DATA.R.r_a,DATA.C.c_a);
     r0;
 }
