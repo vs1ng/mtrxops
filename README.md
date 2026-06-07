@@ -1,5 +1,5 @@
 # MOprs : Matrix Operations 
-## MOprs is a matrix operations library that ME I VINAYAK SINGH made from scratch LAMAHAHAHHAHAAHHAA
+## MOprs is a matrix operations library that ME I VINAYAK SINGH made from scratch
 ### Features:
 
 1. Matrix Multiplication
@@ -8,4 +8,4 @@
 4. Scalar Multiplication
 
 
-ITS SO COOLLL1
+![sample](sample.png)
