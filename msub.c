@@ -39,7 +39,7 @@ void display(int* M, int rc, int cc){
     }
 }
 
-void Add(int* A, int* B, int RA, int RB, int CA, int CB){
+void Sub(int* A, int* B, int RA, int RB, int CA, int CB){
     int* C = calloc(RA*CB, sizeof( *(A+0+0)));
     if(RA==RB){
         if(CA==CB){
@@ -86,6 +86,6 @@ int main(void){
 
     puts("B:");
     display(&B[0][0],DATA.R.r_b,DATA.C.c_b);
-    Add(&A[0][0],&B[0][0],DATA.R.r_a,DATA.R.r_b,DATA.C.c_a,DATA.C.c_b);
+    Sub(&A[0][0],&B[0][0],DATA.R.r_a,DATA.R.r_b,DATA.C.c_a,DATA.C.c_b);
     r0;
 }
