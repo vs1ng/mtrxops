@@ -8,4 +8,4 @@
 4. Scalar Multiplication
 
 
-![sample](sample.png)
+![sample](sampling/sample.png)
