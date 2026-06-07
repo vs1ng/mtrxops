@@ -43,7 +43,6 @@ void Add(int* A, int* B, int RA, int RB, int CA, int CB){
     int* C = calloc(RA*CB, sizeof( *(A+0+0)));
     if(RA==RB){
         if(CA==CB){
-            puts("A + B defined.");
         } else {
             raise(SIGSEGV);
         }
@@ -57,13 +56,6 @@ void Add(int* A, int* B, int RA, int RB, int CA, int CB){
             *(C+i+j) = (int)(*(A+i+j)) + (int)(*(B+i+j));
         }
     }
-   /*for(int i = 0; i < RA; i++){
-        for(int j = 0; j < CB; j++){
-            for(int k = 0; k < CA; k++){
-                *(C+i+j) += (int)(*(A+i+k))*(int)(*(B+k+j));
-            }
-        }
-    }*/
     puts("A + B  = ");
     display(C+0+0,RA,CB);
     bye(C);
