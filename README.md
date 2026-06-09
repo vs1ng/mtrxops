@@ -7,5 +7,18 @@
 3. Subtraction
 4. Scalar Multiplication
 
+### Usage:
+
+#### Simply import the header (.h) file and pass in arguements as described 
+
+```
+Function(Pointer to Array, Row size, Col. size)
+```
+
+e.g : 
 
 ![sample](sampling/sample.png)
+
+#### Demo of Addition and Multiplication:
+
+![addmul](sampling/addmul.png)
