@@ -8,38 +8,42 @@ pthread_mutex_t LOCK;
 atomic_int C = ATOMIC_VAR_INIT(0);
 
 
-void display(int* A,int l){
+void display(int* A,int r, int c){
     printf("\n\t|");
-    for(int I = 0; I < l; I++){
-        printf(" %i |",*(A+I));
+    for(int I = 0; I < r; I++){
+        printf("\n| ");
+        for(int J = 0; J < c; J++){
+            printf(" %i ",*(A+I+J));
+        }
+        printf(" | ");
     }
     printf("\n");
 }
 
 void* F1(void* A){
-    printf("| LOCKG | F1 | C : %i |\n",C);
+    int* ARRAY = ((int*)A+0);
+    int RC = *((int*)A+1);
+    int CC = *((int*)A+2);
+
     pthread_mutex_lock(&LOCK);
-    printf(" A before :"); display(A,12);
+    printf(" A before :");
+    display(ARRAY,RC,CC);
     for(int i = 0; i != 7; i++){
         *((int*)A+i) = 1;
-        sleep(2);
     }
-    printf(" A after :"); display(A,12);
-    printf("| UNLOK | F1 | C : %i |\n",C);
+    printf(" A after :");
+    display(A,RC,CC);
     pthread_mutex_unlock(&LOCK);
     return NULL;
 }
 
 void* F2(void* A){
-    printf("| LOCKG | F2 | C : %i |\n",C);
     pthread_mutex_lock(&LOCK);
     printf(" A before :"); display(A,12);
     for(int j = 7; j != 13; j++){
         *((int*)A+j) = 2;
-        sleep(2);
     }
     printf(" A after :"); display(A,12);
-    printf("| UNLOK | F2 | C : %i |\n",C);
     pthread_mutex_unlock(&LOCK);
     return NULL;
 }
@@ -47,19 +51,29 @@ void* F2(void* A){
 int main(void){
     pthread_mutex_init(&LOCK,NULL);
 
-    void* A = calloc(12,sizeof(int));
+    int A[2][2] = { 
+                    {1,2},
+                    {3,4}
+    };
+
+    int arc = sizeof(A)/sizeof(A[0]);
+    int acc = sizeof(A[0])/sizeof(A[0][0]);
+
+    int DATA[3] = {
+                    &A[0][0],
+                    &arc,
+                    &acc
+    };
 
     pthread_t T1;
     pthread_t T2;
 
-    pthread_create(&T1,NULL,F1,A);
-    pthread_create(&T2,NULL,F2,A);
+    pthread_create(&T1,NULL,F1,DATA);
+    pthread_create(&T2,NULL,F2,DATA);
 
     pthread_join(T1,NULL);
     pthread_join(T2,NULL);
 
     pthread_mutex_destroy(&LOCK);
-    free(A);
-    A = NULL;
     return 0;
 }
