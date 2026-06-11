@@ -8,13 +8,22 @@ pthread_mutex_t LOCK;
 atomic_int C = ATOMIC_VAR_INIT(0);
 
 
-void* F1(int* A){
+void display(int* A,int l){
+    printf("\n");
+    for(int I = 0; I < l; I++){
+        printf("| %i |",*(A+I));
+    }
+    printf("\n");
+}
+
+void* F1(void* A){
     printf("| LOCKG | F1 | C : %i |\n",C);
     pthread_mutex_lock(&LOCK);
-
+    printf(" A before :"); display(A,6);
     for(int i = 0; i != 4; i++){
-        *(A+i) = 1;
+        *((int*)A+i) = 1;
     }
+    printf(" A after :"); display(A,6);
     printf("| UNLOK | F1 | C : %i |\n",C);
     pthread_mutex_unlock(&LOCK);
     sleep(2);
@@ -22,14 +31,14 @@ void* F1(int* A){
     return NULL;
 }
 
-void* F2(int* A){
+void* F2(void* A){
     printf("| LOCKG | F2 | C : %i |\n",C);
     pthread_mutex_lock(&LOCK);
-    
+    printf(" A before :"); display(A,6);
     for(int j = 4; j != 7; j++){
-        *(A+j) = 2;
+        *((int*)A+j) = 2;
     }
-
+    printf(" A after :"); display(A,6);
     printf("| UNLOK | F2 | C : %i |\n",C);
     pthread_mutex_unlock(&LOCK);
     sleep(2);
