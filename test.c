@@ -7,13 +7,20 @@
 pthread_mutex_t LOCK;
 atomic_int C = ATOMIC_VAR_INIT(0);
 
+int returnRowCount(int RC){
+    if(RC%2 == 0){
+        return (RC/2)+1;
+    } else {
+        return (RC+1)/2;
+    }
+}
 
 void display(int* A,int r, int c){
     printf("\n\t|");
     for(int I = 0; I < r; I++){
         printf("\n| ");
         for(int J = 0; J < c; J++){
-            printf(" %i ",*(A+I+J));
+            printf(" %p ",A+I+J);
         }
         printf(" | ");
     }
@@ -26,24 +33,44 @@ void* F1(void* A){
     int CC = *((int*)A+2);
 
     pthread_mutex_lock(&LOCK);
+    
     printf(" A before :");
     display(ARRAY,RC,CC);
-    for(int i = 0; i != 7; i++){
-        *((int*)A+i) = 1;
+    
+    int WorkingRowCount = returnRowCount(RC);
+
+    for(int i = 0; i != WorkingRowCount; i++){
+        for(int j = 0; j < CC; j++){
+            *((int*)A+i+j) = 1;
+        }
     }
     printf(" A after :");
     display(A,RC,CC);
+    
     pthread_mutex_unlock(&LOCK);
     return NULL;
 }
 
 void* F2(void* A){
+    int* ARRAY = ((int*)A+0);
+    int RC = *((int*)A+1);
+    int CC = *((int*)A+2); 
+
     pthread_mutex_lock(&LOCK);
-    printf(" A before :"); display(A,12);
-    for(int j = 7; j != 13; j++){
-        *((int*)A+j) = 2;
+    
+    printf(" A before :");
+    display(ARRAY,RC,CC);
+    
+    int WorkingRowCount = RC-returnRowCount(RC);
+
+    for(int i = 0; i != WorkingRowCount; i++){
+        for(int j = 0; j < CC; j++){
+            *((int*)A+i+j) = 2;
+        }
     }
-    printf(" A after :"); display(A,12);
+    printf(" A after :");
+    display(A,RC,CC);
+    
     pthread_mutex_unlock(&LOCK);
     return NULL;
 }
@@ -59,7 +86,7 @@ int main(void){
     int arc = sizeof(A)/sizeof(A[0]);
     int acc = sizeof(A[0])/sizeof(A[0][0]);
 
-    int DATA[3] = {
+    int* DATA[3] = {
                     &A[0][0],
                     &arc,
                     &acc
