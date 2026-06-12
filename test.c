@@ -28,9 +28,9 @@ void display(int* A,int r, int c){
 }
 
 void* F1(void* A){
-    int* ARRAY = ((int*)A+0);
-    int RC = *((int*)A+1);
-    int CC = *((int*)A+2);
+    int* ARRAY = (A+0);
+    int RC = *(int*)(A+1);
+    int CC = *(int*)(A+2);
 
     pthread_mutex_lock(&LOCK);
     

@@ -13,20 +13,12 @@ int main(){
 
     int* D[3] = {&A[0][0],&R,&C};
 
-    printf("D : %p\nD[0] : %p\nD[1] : %p\nD[2] : %p\n",D,D[0],D[1],D[2]);
-    printf("&A = %p\n*S = &A[0][0] = %p\n",&A,S);
-    for(int i = 0; i != 5; i++){
-        printf(" D+%i : %p\t *(D+%i) : %p\n",i,D[i],i,*(D+i));
-    }
-    for(int i = 0; i != 5; i++){
-        for(int j = 0; j!= 5; j++){
-            printf(" D+%i+%i : %p\t *(D+%i+%i) : %p\n",i,j,D+i+j,i,j,*(D+i+j));
-        }
-    }
-    for(int i = 0; i < 3; i++){
+    int* a = D[0];
+
+    for(int i = 0; i < R; i++){
         printf(" | ");
-        for(int j = 0; j < 3; j++){
-            printf(" %i : %p ",A[i][j],&A[i][j]);
+        for(int j = 0; j < C; j++){
+            printf(" %i ",*(a+i+j));
         }
         printf(" | \n");
     }
