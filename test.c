@@ -3,9 +3,15 @@
 #include <unistd.h>
 #include <stdatomic.h>
 #include <stdlib.h>
+#include <signal.h>
 
 pthread_mutex_t LOCK;
 atomic_int C = ATOMIC_VAR_INIT(0);
+
+void catch(int sig){
+    puts("seg fault");
+    exit(EXIT_FAILURE);
+}
 
 int returnRowCount(int RC){
     if(RC%2 == 0){
@@ -16,6 +22,8 @@ int returnRowCount(int RC){
 }
 
 void display(int* A,int r, int c){
+    signal(SIGSEGV,catch);
+
     printf("\n\t|");
     for(int I = 0; I < r; I++){
         printf("\n| ");
@@ -29,8 +37,8 @@ void display(int* A,int r, int c){
 
 void* F1(void* A){
     int* ARRAY = (A+0);
-    int RC = *(int*)(A+1);
-    int CC = *(int*)(A+2);
+    int RC = *((int*)(A+1));
+    int CC = *((int*)(A+2));
 
     pthread_mutex_lock(&LOCK);
     
@@ -52,9 +60,9 @@ void* F1(void* A){
 }
 
 void* F2(void* A){
-    int* ARRAY = ((int*)A+0);
-    int RC = *((int*)A+1);
-    int CC = *((int*)A+2); 
+    int* ARRAY = (A+0);
+    int RC = *(int*)(A+1);
+    int CC = *(int*)(A+2); 
 
     pthread_mutex_lock(&LOCK);
     
@@ -76,6 +84,7 @@ void* F2(void* A){
 }
 
 int main(void){
+
     pthread_mutex_init(&LOCK,NULL);
 
     int A[2][2] = { 
@@ -86,7 +95,7 @@ int main(void){
     int arc = sizeof(A)/sizeof(A[0]);
     int acc = sizeof(A[0])/sizeof(A[0][0]);
 
-    int* DATA[3] = {
+    void* DATA[3] = {
                     &A[0][0],
                     &arc,
                     &acc
