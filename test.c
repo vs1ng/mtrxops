@@ -36,15 +36,18 @@ void display(int* A,int r, int c){
 }
 
 void* F1(void* A){
+    int* ARRAY = (((int*)A+0));
+    printf("Address of Array =  %p\n",ARRAY);
+    /*
     int* ARRAY = (A+0);
     int RC = *((int*)(A+1));
     int CC = *((int*)(A+2));
 
     pthread_mutex_lock(&LOCK);
-    /*
+
     printf(" A before :");
     display(ARRAY,RC,CC);
-    */
+    
     int WorkingRowCount = returnRowCount(RC);
 
     for(int i = 0; i != WorkingRowCount; i++){
@@ -52,11 +55,12 @@ void* F1(void* A){
             *((int*)A+i+j) = 1;
         }
     }
-    /*
+    
     printf(" A after :");
     display(A,RC,CC);
-    */
+    
     pthread_mutex_unlock(&LOCK);
+    */
     return NULL;
 }
 /*
