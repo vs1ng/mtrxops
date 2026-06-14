@@ -36,15 +36,18 @@ void display(int* A,int r, int c){
 }
 
 void* F1(void* A){
-    int* ARRAY = *((int**)A+0);
-    int RC = *(*((int**)A+1));
-    int CC = *(*((int**)A+2));
+    int* A_RAY = *((int**)A+0);
+    int* B_RAY = *((int**)A+1);
+    int ARC = *(*((int**)A+3));
+    int ACC = *(*((int**)A+4));
+    
+    int BRC = *(*((int**)A+2));
+    int BCC = *(*((int**)A+5));
     
     pthread_mutex_lock(&LOCK);
-    printf("A before :");
-    display(ARRAY,RC,CC);
-    
-    int WorkingRowCount = returnRowCount(RC);
+   
+    int RES[ARC][BCC];
+    int WorkingRowCount = returnRowCount(ARC);
 
     for(int i = 0; i != WorkingRowCount; i++){
         for(int j = 0; j < CC; j++){
@@ -52,8 +55,6 @@ void* F1(void* A){
         }
     }
     
-    printf(" A after :");
-    display(ARRAY,RC,CC);
     
     pthread_mutex_unlock(&LOCK);
 
