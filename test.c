@@ -96,12 +96,29 @@ int main(void){
     int arc = sizeof(A)/sizeof(A[0]);
     int acc = sizeof(A[0])/sizeof(A[0][0]);
 
+    printf("[MAIN]:\tAddr(A) : %p\tAddr(arc) : %p\tAddr(acc) : %p\n",&A,&arc,&acc);
     void* DATA[3] = {
                     &A[0][0],
                     &arc,
                     &acc
     };
 
+    printf("[MAIN]:\tAddr(DATA) : %p\n",&DATA);
+    for(int I = 0; I < 3; I++){
+        printf("[MAIN]:\tD[%i] = %p | %p\n",I,DATA+I,*(DATA+I));
+    }
+    
+    for(int i = 0; i < 2; i++){
+        for(int j = 0; j < 2; j++){
+            printf("[MAIN]:\tA[%i][%i] = %i : %p\n",i,j,A[i][j],&A[i][j]);
+        }
+    }
+    
+    puts("[MAIN]: setting ad = *(DATA+0)");
+    int* ad = *(DATA+0); 
+    printf("[MAIN]: ad = %p\n",ad);
+
+    exit(EXIT_SUCCESS);
     pthread_t T1;
     pthread_t T2;
 
