@@ -72,7 +72,7 @@ void* F2(void* A){
     
     int WorkingRowCount = RC-returnRowCount(RC);
 
-    for(int i = 0; i != WorkingRowCount; i++){
+    for(int i = WorkingRowCount; i != RC; i++){
         for(int j = 0; j < CC; j++){
             *(ARRAY+i+j) = 2;
         }
