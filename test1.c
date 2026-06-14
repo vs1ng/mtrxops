@@ -15,7 +15,7 @@ void catch(int sig){
 
 int returnRowCount(int RC){
     if(RC%2 == 0){
-        return (RC/2)+1;
+        return RC/2;
     } else {
         return (RC+1)/2;
     }
@@ -72,7 +72,7 @@ void* F2(void* A){
     
     int WorkingRowCount = RC-returnRowCount(RC);
 
-    for(int i = WorkingRowCount; i != RC; i++){
+    for(int i = WorkingRowCount+1; i != RC; i++){
         for(int j = 0; j < CC; j++){
             ARRAY[i*CC+j] = 2;
         }
@@ -99,8 +99,20 @@ int main(void){
 
     };
 
+    int B[5][5] = {
+                    {1,2,3,4,5},
+                    {6,7,8,9,10},
+                    {11,12,13,14,15},
+                    {16,17,18,19,20},
+                    {21,22,23,24,25}
+    };
+
     int arc = sizeof(A)/sizeof(A[0]);
     int acc = sizeof(A[0])/sizeof(A[0][0]);
+
+    int brc = sizeof(B)/sizeof(B[0]);
+    int bcc = sizeof(B[0])/sizeof(B[0][0]);
+
 
     void* DATA[3] = {
                     &A[0][0],
