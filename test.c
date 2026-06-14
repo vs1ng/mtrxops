@@ -41,10 +41,10 @@ void* F1(void* A){
     int CC = *((int*)(A+2));
 
     pthread_mutex_lock(&LOCK);
-    
+    /*
     printf(" A before :");
     display(ARRAY,RC,CC);
-    
+    */
     int WorkingRowCount = returnRowCount(RC);
 
     for(int i = 0; i != WorkingRowCount; i++){
@@ -52,9 +52,10 @@ void* F1(void* A){
             *((int*)A+i+j) = 1;
         }
     }
+    /*
     printf(" A after :");
     display(A,RC,CC);
-    
+    */
     pthread_mutex_unlock(&LOCK);
     return NULL;
 }
@@ -65,10 +66,10 @@ void* F2(void* A){
     int CC = *(int*)(A+2); 
 
     pthread_mutex_lock(&LOCK);
-    
+    /*
     printf(" A before :");
     display(ARRAY,RC,CC);
-    
+    */
     int WorkingRowCount = RC-returnRowCount(RC);
 
     for(int i = 0; i != WorkingRowCount; i++){
