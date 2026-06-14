@@ -114,10 +114,13 @@ int main(void){
     int bcc = sizeof(B[0])/sizeof(B[0][0]);
 
 
-    void* DATA[3] = {
+    void* DATA[6] = {
                     &A[0][0],
+                    &B[0][0],
+                    &brc,
                     &arc,
-                    &acc
+                    &acc,
+                    &bcc
     };
 
     pthread_t T1;
