@@ -28,7 +28,7 @@ void display(int* A,int r, int c){
     for(int I = 0; I < r; I++){
         printf("\n| ");
         for(int J = 0; J < c; J++){
-            printf(" %i ",*((int*)A+I+J));
+            printf(" %i ",A[I*c+J]);
         }
         printf(" | ");
     }
@@ -48,7 +48,7 @@ void* F1(void* A){
 
     for(int i = 0; i != WorkingRowCount; i++){
         for(int j = 0; j < CC; j++){
-            *(ARRAY+i+j) = 1;
+            ARRAY[i*CC+j] = 1;
         }
     }
     
@@ -74,7 +74,7 @@ void* F2(void* A){
 
     for(int i = WorkingRowCount; i != RC; i++){
         for(int j = 0; j < CC; j++){
-            *(ARRAY+i+j) = 2;
+            ARRAY[i*CC+j] = 2;
         }
     }
     

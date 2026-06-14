@@ -33,7 +33,7 @@ void display(int* M, int rc, int cc){
 	for(int i = 0; i < rc; i++){
 		printf(" | ");
 		for(int j = 0; j < cc; j++){
-			printf(" %i ",*(M+i+j));
+			printf(" %i ",M[i*cc+j]);
 		}
 		printf(" |\n");
 	}
@@ -51,7 +51,7 @@ void Multiply(int* A, int* B, int RA, int RB, int CA, int CB){
 	for(int i = 0; i < RA; i++){
 		for(int j = 0; j < CB; j++){
 			for(int k = 0; k < CA; k++){
-				*(C+i+j) += (int)(*(A+i+k))*(int)(*(B+k+j));
+				C[i*CB+j] += (int)A[i*CA+k]*(int)B[k*CB+j];
 			}
 		}
 	}
@@ -73,8 +73,8 @@ void Add(int* A, int* B, int RA, int RB, int CA, int CB){
 	int ROW = RA;
 	int COL = CA;
 	for(int i = 0; i < ROW; i++){
-		for(int j = 0; j < ROW; j++){
-			*(C+i+j) = (int)(*(A+i+j)) + (int)(*(B+i+j));
+		for(int j = 0; j < COL; j++){
+			C[i*COL+j] = (int)A[i*CA+j] + (int)B[i*CA+j];
 		}
 	}
 	puts("A + B  = ");
@@ -86,7 +86,7 @@ void ScalarMul(int K, int* A, int RA, int CA){
 	for(int i = 0; i < RA; i++){
 		for(int j = 0; j < CA; j++){
 			printf("value at (%i,%i) before mul with %i : %i\n",i,j,K,*(A+i+j));
-			*(A+i+j) = K*(int)(*(A+i+j));
+			A[i*CA+j] = K*(int)A[i*CA+j];
 			printf("value at (%i,%i) after  mul with %i : %i\n",i,j,K,*(A+i+j));
 		}
 	}
@@ -107,11 +107,11 @@ void Sub(int* A, int* B, int RA, int RB, int CA, int CB){
 	int ROW = RA;
 	int COL = CA;
 	for(int i = 0; i < ROW; i++){
-		for(int j = 0; j < ROW; j++){
-			*(C+i+j) = (int)(*(A+i+j)) - (int)(*(B+i+j));
+		for(int j = 0; j < COL; j++){
+			C[i*COL+j] = (int)A[i*CA+j] - (int)B[i*CA+j];
 		}
 	}
-	puts("A + B  = ");
+	puts("A - B  = ");
 	display(C+0+0,RA,CB);
 	bye(C);
 }
