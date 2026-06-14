@@ -36,8 +36,10 @@ void display(int* A,int r, int c){
 }
 
 void* F1(void* A){
-    int* ARRAY = (((int*)A+0));
-    printf("Address of Array =  %p\n",ARRAY);
+    int* ARRAY = *((int**)A+0);
+    int RC = *(*((int**)A+1));
+    int CC = *(*((int**)A+2));
+    printf("Address of Array: %p\nRC = %i\nCC = %i\n",ARRAY,RC,CC);
     /*
     int* ARRAY = (A+0);
     int RC = *((int*)(A+1));
