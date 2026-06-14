@@ -61,7 +61,7 @@ void* F1(void* A){
 }
 
 void* F2(void* A){
-    int* ARRAY = (A+0);
+    int* ARRAY = ((int*)A+0);
     int RC = *(int*)(A+1);
     int CC = *(int*)(A+2); 
 
@@ -114,9 +114,26 @@ int main(void){
         }
     }
     
-    puts("[MAIN]: setting ad = *(DATA+0)");
-    int* ad = *(DATA+0); 
-    printf("[MAIN]: ad = %p\n",ad);
+    puts("[MAIN]: setting ARRAY  = *(DATA+0)");
+    int* ARRAY = *(DATA+0); 
+    printf("[MAIN]: ARRAY = %p\n",ARRAY);
+
+    puts("[MAIN]: setting RC = *(DATA+1)");
+    int* RC = *(DATA+1); 
+    printf("[MAIN]: RC = %p\n",RC);
+
+    puts("[MAIN]: setting CC = *(DATA+2)");
+    int* CC = *(DATA+2); 
+    printf("[MAIN]: CC = %p\n",CC);
+
+    puts("[MAIN]: setting RCV = (int*)*(DATA+1)");
+    int* RCV = (int*)*(DATA+1); 
+    printf("[MAIN]: *RCV = %i\n",*RC);
+/*
+    puts("[MAIN]: setting CCV = *(DATA+2)");
+    int* CCV = *(DATA+2); 
+    printf("[MAIN]: CCV = %p\n",CC);
+*/
 
     exit(EXIT_SUCCESS);
     pthread_t T1;
