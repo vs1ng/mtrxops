@@ -38,6 +38,8 @@ void display(int* A,int r, int c){
 void* F1(void* A){
     int* A_RAY = *((int**)A+0);
     int* B_RAY = *((int**)A+1);
+    int* R_RAY = *((int**)A+6);
+
     int ARC = *(*((int**)A+3));
     int ACC = *(*((int**)A+4));
     
@@ -46,15 +48,15 @@ void* F1(void* A){
     
     pthread_mutex_lock(&LOCK);
    
-    int RES[ARC][BCC];
     int WorkingRowCount = returnRowCount(ARC);
 
+    /*
     for(int i = 0; i != WorkingRowCount; i++){
         for(int j = 0; j < CC; j++){
             ARRAY[i*CC+j] = 1;
         }
     }
-    
+    */
     
     pthread_mutex_unlock(&LOCK);
 
@@ -114,14 +116,16 @@ int main(void){
     int brc = sizeof(B)/sizeof(B[0]);
     int bcc = sizeof(B[0])/sizeof(B[0][0]);
 
+    int RES[arc][bcc];
 
-    void* DATA[6] = {
+    void* DATA[7] = {
                     &A[0][0],
                     &B[0][0],
                     &brc,
                     &arc,
                     &acc,
-                    &bcc
+                    &bcc,
+                    &RES[0][0]
     };
 
     pthread_t T1;
