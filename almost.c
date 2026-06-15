@@ -49,45 +49,74 @@ void* F1(void* A){
     pthread_mutex_lock(&LOCK);
    
     int WorkingRowCount = returnRowCount(ARC);
+    puts("[F1]: A : ");
+    display(A_RAY,ARC,ACC);
+    puts("[F1]: B: ");
+    display(B_RAY,BRC,BCC);
+    puts("[F1]: A x B: ");
+    display(R_RAY,ARC,BCC);
 
-    /*
     for(int i = 0; i != WorkingRowCount; i++){
-        for(int j = 0; j < CC; j++){
-            ARRAY[i*CC+j] = 1;
+        for(int j = 0; j < ARC; j++){
+            for(int k = 0; k < ARC; k++){
+                R_RAY[i*BCC+j] += A_RAY[i*ARC+k]*B_RAY[k*BCC+j];
+            }
         }
     }
-    */
     
+    puts("[F1]: A : ");
+    display(A_RAY,ARC,ACC);
+    puts("[F1]: B: ");
+    display(B_RAY,BRC,BCC);
+    puts("[F1]: A x B: ");
+    display(R_RAY,ARC,BCC);
+
     pthread_mutex_unlock(&LOCK);
 
     return NULL;
 }
-
 
 void* F2(void* A){
-    int* ARRAY = *((int**)A+0);
-    int RC = *(*((int**)A+1));
-    int CC = *(*((int**)A+2));
+    int* A_RAY = *((int**)A+0);
+    int* B_RAY = *((int**)A+1);
+    int* R_RAY = *((int**)A+6);
+
+    int ARC = *(*((int**)A+3));
+    int ACC = *(*((int**)A+4));
+    
+    int BRC = *(*((int**)A+2));
+    int BCC = *(*((int**)A+5));
     
     pthread_mutex_lock(&LOCK);
-    printf("A before :");
-    display(ARRAY,RC,CC);
-    
-    int WorkingRowCount = RC-returnRowCount(RC);
+   
+    int WorkingRowCount = ARC-returnRowCount(ARC);
+    puts("[F2]: A : ");
+    display(A_RAY,ARC,ACC);
+    puts("[F2]: B: ");
+    display(B_RAY,BRC,BCC);
+    puts("[F2]: A x B: ");
+    display(R_RAY,ARC,BCC);
 
-    for(int i = WorkingRowCount+1; i != RC; i++){
-        for(int j = 0; j < CC; j++){
-            ARRAY[i*CC+j] = 2;
+    for(int i = WorkingRowCount; i != ARC; i++){
+        for(int j = 0; j < ARC; j++){
+            for(int k = 0; k < ARC; k++){
+                R_RAY[i*BCC+j] += A_RAY[i*ARC+k]*B_RAY[k*BCC+j];
+            }
         }
     }
     
-    printf(" A after :");
-    display(ARRAY,RC,CC);
-    
+    puts("[F2]: A : ");
+    display(A_RAY,ARC,ACC);
+    puts("[F2]: B: ");
+    display(B_RAY,BRC,BCC);
+    puts("[F2]: A x B: ");
+    display(R_RAY,ARC,BCC);
+
     pthread_mutex_unlock(&LOCK);
 
     return NULL;
 }
+
 
 int main(void){
 
