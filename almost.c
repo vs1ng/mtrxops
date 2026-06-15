@@ -4,6 +4,7 @@
 #include <stdatomic.h>
 #include <stdlib.h>
 #include <signal.h>
+#include <memory.h>
 
 pthread_mutex_t LOCK;
 atomic_int C = ATOMIC_VAR_INIT(0);
@@ -49,25 +50,17 @@ void* F1(void* A){
     pthread_mutex_lock(&LOCK);
    
     int WorkingRowCount = returnRowCount(ARC);
-    puts("[F1]: A : ");
-    display(A_RAY,ARC,ACC);
-    puts("[F1]: B: ");
-    display(B_RAY,BRC,BCC);
     puts("[F1]: A x B: ");
     display(R_RAY,ARC,BCC);
 
     for(int i = 0; i != WorkingRowCount; i++){
-        for(int j = 0; j < ARC; j++){
-            for(int k = 0; k < ARC; k++){
+        for(int j = 0; j < ACC; j++){
+            for(int k = 0; k < BRC; k++){
                 R_RAY[i*BCC+j] += A_RAY[i*ARC+k]*B_RAY[k*BCC+j];
             }
         }
     }
     
-    puts("[F1]: A : ");
-    display(A_RAY,ARC,ACC);
-    puts("[F1]: B: ");
-    display(B_RAY,BRC,BCC);
     puts("[F1]: A x B: ");
     display(R_RAY,ARC,BCC);
 
@@ -90,25 +83,17 @@ void* F2(void* A){
     pthread_mutex_lock(&LOCK);
    
     int WorkingRowCount = ARC-returnRowCount(ARC);
-    puts("[F2]: A : ");
-    display(A_RAY,ARC,ACC);
-    puts("[F2]: B: ");
-    display(B_RAY,BRC,BCC);
     puts("[F2]: A x B: ");
     display(R_RAY,ARC,BCC);
 
-    for(int i = WorkingRowCount; i != ARC; i++){
-        for(int j = 0; j < ARC; j++){
-            for(int k = 0; k < ARC; k++){
+    for(int i = WorkingRowCount+1; i != ARC; i++){
+        for(int j = 0; j < ACC; j++){
+            for(int k = 0; k < BRC; k++){
                 R_RAY[i*BCC+j] += A_RAY[i*ARC+k]*B_RAY[k*BCC+j];
             }
         }
     }
     
-    puts("[F2]: A : ");
-    display(A_RAY,ARC,ACC);
-    puts("[F2]: B: ");
-    display(B_RAY,BRC,BCC);
     puts("[F2]: A x B: ");
     display(R_RAY,ARC,BCC);
 
@@ -146,7 +131,8 @@ int main(void){
     int bcc = sizeof(B[0])/sizeof(B[0][0]);
 
     int RES[arc][bcc];
-
+    memset(RES, 0, sizeof(RES));
+    
     void* DATA[7] = {
                     &A[0][0],
                     &B[0][0],
