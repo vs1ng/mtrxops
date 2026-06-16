@@ -35,7 +35,7 @@ void display(int* A,int r, int c){
     printf("\n");
 }
 
-void* F1(void* A){
+void* MF1(void* A){
     int* A_RAY = *((int**)A+0);
     int* B_RAY = *((int**)A+1);
     int* R_RAY = *((int**)A+6);
@@ -63,7 +63,7 @@ void* F1(void* A){
     return NULL;
 }
 
-void* F2(void* A){
+void* MF2(void* A){
     int* A_RAY = *((int**)A+0);
     int* B_RAY = *((int**)A+1);
     int* R_RAY = *((int**)A+6);
@@ -98,8 +98,8 @@ void Multiply(void* DATA){
     pthread_t T1;
     pthread_t T2;
 
-    pthread_create(&T1,NULL,F1,DATA);
-    pthread_create(&T2,NULL,F2,DATA);
+    pthread_create(&T1,NULL,MF1,DATA);
+    pthread_create(&T2,NULL,MF2,DATA);
 
     pthread_join(T1,NULL);
     pthread_join(T2,NULL);
