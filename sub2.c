@@ -35,6 +35,79 @@ void display(int* A,int r, int c){
     printf("\n");
 }
 
+void* AF1(void* A){
+    int* A_RAY = *((int**)A+0);
+    int* B_RAY = *((int**)A+1);
+    int* R_RAY = *((int**)A+6);
+
+    int ARC = *(*((int**)A+3));
+    int ACC = *(*((int**)A+4));
+    
+    int BRC = *(*((int**)A+2));
+    int BCC = *(*((int**)A+5));
+    
+    if(ARC == BRC){
+        if(ACC == BCC){
+        } else {
+            puts("Col Count of A != Col Count of B");
+            exit(EXIT_FAILURE);
+        }
+    } else {
+        puts("Row Count of A != Row Count of B");
+        exit(EXIT_FAILURE);
+    }
+    
+    pthread_mutex_lock(&LOCK);
+
+    int WRC = returnRowCount(ARC);
+    for(int i = 0; i != WRC; i++){
+        for(int j = 0; j < ACC; j++){
+            R_RAY[i*ACC+j] = (int)A_RAY[i*ACC+j] + (int)B_RAY[i*ACC+j];
+        }
+    }
+
+    pthread_mutex_unlock(&LOCK);
+
+    return NULL;
+}
+
+void* AF2(void* A){
+    int* A_RAY = *((int**)A+0);
+    int* B_RAY = *((int**)A+1);
+    int* R_RAY = *((int**)A+6);
+
+    int ARC = *(*((int**)A+3));
+    int ACC = *(*((int**)A+4));
+    
+    int BRC = *(*((int**)A+2));
+    int BCC = *(*((int**)A+5));
+    
+    if(ARC == BRC){
+        if(ACC == BCC){
+        } else {
+            puts("Col Count of A != Col Count of B");
+            exit(EXIT_FAILURE);
+        }
+    } else {
+        puts("Row Count of A != Row Count of B");
+        exit(EXIT_FAILURE);
+    }
+    
+    pthread_mutex_lock(&LOCK);
+
+    int WRC = ARC-returnRowCount(ARC);
+    for(int i = WRC+1; i != ARC; i++){
+        for(int j = 0; j < ACC; j++){
+            R_RAY[i*ACC+j] = (int)A_RAY[i*ACC+j] + (int)B_RAY[i*ACC+j];
+        }
+    }
+
+    pthread_mutex_unlock(&LOCK);
+
+    return NULL;
+}
+
+
 void* MF1(void* A){
     int* A_RAY = *((int**)A+0);
     int* B_RAY = *((int**)A+1);
@@ -107,7 +180,21 @@ void Multiply(void* DATA){
     pthread_mutex_destroy(&LOCK);
 }
 
+void Add(void* DATA){
 
+    pthread_mutex_init(&LOCK,NULL);
+
+    pthread_t A1;
+    pthread_t A2;
+
+    pthread_create(&A1,NULL,AF1,DATA);
+    pthread_create(&A2,NULL,AF2,DATA);
+
+    pthread_join(A1,NULL);
+    pthread_join(A2,NULL);
+
+    pthread_mutex_destroy(&LOCK);
+}
 
 int main(void){
 
@@ -147,7 +234,7 @@ int main(void){
                     &RES[0][0]
     };
 
-    Multiply(DATA);
+    Add(DATA);
     display(&RES[0][0],arc,bcc);
     return 0;
 }
