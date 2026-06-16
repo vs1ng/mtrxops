@@ -111,8 +111,6 @@ void Multiply(void* DATA){
 
 int main(void){
 
-    pthread_mutex_init(&LOCK,NULL);
-
     int A[5][5] = { 
                     {1,2,3,4,5},
                     {6,7,8,9,10},
