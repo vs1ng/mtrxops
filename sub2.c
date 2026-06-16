@@ -35,6 +35,28 @@ void display(int* A,int r, int c){
     printf("\n");
 }
 
+void* KM1(void* A){
+    int* A_RAY = *((int**)A+0);
+    int* R_RAY = *((int**)A+1);
+    
+    int KNT = *(*((int**)A+2));
+    int ARC = *(*((int**)A+3));
+    int ACC = *(*((int**)A+4));
+    
+    pthread_mutex_lock(&LOCK);
+    
+    int WRC = returnRowCount(ARC);
+    for(int i = 0; i != WRC; i++){
+        for(int j = 0; j < ACC; j++){
+            R_RAY[i*ACC+j] = ((int)A_RAY[i*ACC+j])*(KNT);
+        }
+    }
+    
+    pthread_mutex_unlock(&LOCK);
+    
+    return NULL;
+}
+
 void* SF1(void* A){
     int* A_RAY = *((int**)A+0);
     int* B_RAY = *((int**)A+1);
