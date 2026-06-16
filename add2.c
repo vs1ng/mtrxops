@@ -180,7 +180,21 @@ void Multiply(void* DATA){
     pthread_mutex_destroy(&LOCK);
 }
 
+void Add(void* DATA){
 
+    pthread_mutex_init(&LOCK,NULL);
+
+    pthread_t A1;
+    pthread_t A2;
+
+    pthread_create(&A1,NULL,AF1,DATA);
+    pthread_create(&A2,NULL,AF2,DATA);
+
+    pthread_join(A1,NULL);
+    pthread_join(A2,NULL);
+
+    pthread_mutex_destroy(&LOCK);
+}
 
 int main(void){
 
@@ -220,7 +234,7 @@ int main(void){
                     &RES[0][0]
     };
 
-    Multiply(DATA);
+    Add(DATA);
     display(&RES[0][0],arc,bcc);
     return 0;
 }
