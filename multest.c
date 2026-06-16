@@ -7,7 +7,6 @@
 #include <memory.h>
 
 pthread_mutex_t LOCK;
-atomic_int C = ATOMIC_VAR_INIT(0);
 
 void catch(int sig){
     puts("seg fault");
@@ -50,8 +49,6 @@ void* F1(void* A){
     pthread_mutex_lock(&LOCK);
    
     int WorkingRowCount = returnRowCount(ARC);
-    puts("[F1]: A x B: ");
-    display(R_RAY,ARC,BCC);
 
     for(int i = 0; i != WorkingRowCount; i++){
         for(int j = 0; j < ACC; j++){
@@ -60,9 +57,6 @@ void* F1(void* A){
             }
         }
     }
-    
-    puts("[F1]: A x B: ");
-    display(R_RAY,ARC,BCC);
 
     pthread_mutex_unlock(&LOCK);
 
@@ -83,8 +77,6 @@ void* F2(void* A){
     pthread_mutex_lock(&LOCK);
    
     int WorkingRowCount = ARC-returnRowCount(ARC);
-    puts("[F2]: A x B: ");
-    display(R_RAY,ARC,BCC);
 
     for(int i = WorkingRowCount+1; i != ARC; i++){
         for(int j = 0; j < ACC; j++){
@@ -93,14 +85,28 @@ void* F2(void* A){
             }
         }
     }
-    
-    puts("[F2]: A x B: ");
-    display(R_RAY,ARC,BCC);
 
     pthread_mutex_unlock(&LOCK);
 
     return NULL;
 }
+
+void Multiply(void* DATA){
+
+    pthread_mutex_init(&LOCK,NULL);
+
+    pthread_t T1;
+    pthread_t T2;
+
+    pthread_create(&T1,NULL,F1,DATA);
+    pthread_create(&T2,NULL,F2,DATA);
+
+    pthread_join(T1,NULL);
+    pthread_join(T2,NULL);
+
+    pthread_mutex_destroy(&LOCK);
+}
+
 
 
 int main(void){
@@ -143,16 +149,7 @@ int main(void){
                     &RES[0][0]
     };
 
-    pthread_t T1;
-    pthread_t T2;
-
-    pthread_create(&T1,NULL,F1,DATA);
-    pthread_create(&T2,NULL,F2,DATA);
-
-    pthread_join(T1,NULL);
-    pthread_join(T2,NULL);
-
-    pthread_mutex_destroy(&LOCK);
+    Multiply(DATA);
+    display(&RES[0][0],arc,bcc);
     return 0;
 }
-
