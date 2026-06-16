@@ -21,7 +21,18 @@
 ```
 ![](sampling/displaydemo.png)
 
-#### 2. Multi-Threaded Multiply():
+### 2. Multi-Threaded Algebra():
+#### This method is fixed for:
+
+* Addition
+* Subtraction
+* Multiplication 
+
+| Operation | Function Name |
+| --------- | ------------- |
+| Multiplication | Multiply() |
+| Addition | Add() |
+| Subtraction | Sub() |
 
 1. Define both Matrices
 
@@ -48,9 +59,11 @@ void* DATA[7] = {
 ```
 ![](sampling/mmstep3.png)
 
-4. Call Multiply() on the above array.
+4. Call Operation() on the above array.
 ```
 Multiply(DATA);
+Add(DATA);
+Sub(DATA);
 ```
 
 ![](sampling/mmstep4.png)
