@@ -1,7 +1,12 @@
-# MOprs : Matrix Operations 
+# MOprs : Multi-Threaded Matrix Operations 
 ## MOprs is a multi-threaded matrix operations library that I, Vinayak Singh, made from ground up.
 
-### Features:
+| File | Type | Category | 
+| ---- | ---- | -------- |
+| moprsth.c | Main Header file | Threaded Operations |
+| moprsnth.c | Old Header file | Non-threaded operations |
+
+## Features:
 
 | S.No. | Operation |
 | ----- | --------- |
