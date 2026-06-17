@@ -6,7 +6,10 @@
 #include <signal.h>
 #include <memory.h>
 
-pthread_mutex_t LOCK;
+pthread_mutex_t MUL_LOCK;
+pthread_mutex_t SCM_LOCK;
+pthread_mutex_t ADD_LOCK;
+pthread_mutex_t SUB_LOCK;
 
 void catch(int sig){
     puts("seg fault");
@@ -43,7 +46,7 @@ void* KM1(void* A){
     int ARC = *(*((int**)A+3));
     int ACC = *(*((int**)A+4));
     
-    pthread_mutex_lock(&LOCK);
+    pthread_mutex_lock(&SCM_LOCK);
     
     int WRC = returnRowCount(ARC);
     for(int i = 0; i != WRC; i++){
@@ -52,7 +55,7 @@ void* KM1(void* A){
         }
     }
     
-    pthread_mutex_unlock(&LOCK);
+    pthread_mutex_unlock(&SCM_LOCK);
     
     return NULL;
 }
@@ -65,7 +68,7 @@ void* KM2(void* A){
     int ARC = *(*((int**)A+3));
     int ACC = *(*((int**)A+4));
     
-    pthread_mutex_lock(&LOCK);
+    pthread_mutex_lock(&SCM_LOCK);
     
     int WRC = ARC-returnRowCount(ARC);
     for(int i = WRC+1; i != ARC; i++){
@@ -74,7 +77,7 @@ void* KM2(void* A){
         }
     }
     
-    pthread_mutex_unlock(&LOCK);
+    pthread_mutex_unlock(&SCM_LOCK);
     
     return NULL;
 }
@@ -101,16 +104,16 @@ void* SF1(void* A){
         exit(EXIT_FAILURE);
     }
     
-    pthread_mutex_lock(&LOCK);
+    pthread_mutex_lock(&SUB_LOCK);
     
     int WRC = returnRowCount(ARC);
     for(int i = 0; i != WRC; i++){
         for(int j = 0; j < ACC; j++){
-            R_RAY[i*ACC+j] = (int)A_RAY[i*ACC+j] + (int)B_RAY[i*ACC+j];
+            R_RAY[i*ACC+j] = (int)A_RAY[i*ACC+j] - (int)B_RAY[i*ACC+j];
         }
     }
     
-    pthread_mutex_unlock(&LOCK);
+    pthread_mutex_unlock(&SUB_LOCK);
     
     return NULL;
 }
@@ -137,7 +140,7 @@ void* AF1(void* A){
         exit(EXIT_FAILURE);
     }
     
-    pthread_mutex_lock(&LOCK);
+    pthread_mutex_lock(&ADD_LOCK);
 
     int WRC = returnRowCount(ARC);
     for(int i = 0; i != WRC; i++){
@@ -146,7 +149,7 @@ void* AF1(void* A){
         }
     }
 
-    pthread_mutex_unlock(&LOCK);
+    pthread_mutex_unlock(&ADD_LOCK);
 
     return NULL;
 }
@@ -173,16 +176,16 @@ void* SF2(void* A){
         exit(EXIT_FAILURE);
     }
     
-    pthread_mutex_lock(&LOCK);
+    pthread_mutex_lock(&SUB_LOCK);
     
     int WRC = ARC-returnRowCount(ARC);
     for(int i = WRC+1; i != ARC; i++){
         for(int j = 0; j < ACC; j++){
-            R_RAY[i*ACC+j] = (int)A_RAY[i*ACC+j] + (int)B_RAY[i*ACC+j];
+            R_RAY[i*ACC+j] = (int)A_RAY[i*ACC+j] - (int)B_RAY[i*ACC+j];
         }
     }
     
-    pthread_mutex_unlock(&LOCK);
+    pthread_mutex_unlock(&SUB_LOCK);
     
     return NULL;
 }
@@ -209,7 +212,7 @@ void* AF2(void* A){
         exit(EXIT_FAILURE);
     }
     
-    pthread_mutex_lock(&LOCK);
+    pthread_mutex_lock(&ADD_LOCK);
 
     int WRC = ARC-returnRowCount(ARC);
     for(int i = WRC+1; i != ARC; i++){
@@ -218,7 +221,7 @@ void* AF2(void* A){
         }
     }
 
-    pthread_mutex_unlock(&LOCK);
+    pthread_mutex_unlock(&ADD_LOCK);
 
     return NULL;
 }
@@ -235,7 +238,7 @@ void* MF1(void* A){
     int BRC = *(*((int**)A+2));
     int BCC = *(*((int**)A+5));
     
-    pthread_mutex_lock(&LOCK);
+    pthread_mutex_lock(&MUL_LOCK);
    
     int WorkingRowCount = returnRowCount(ARC);
 
@@ -247,7 +250,7 @@ void* MF1(void* A){
         }
     }
 
-    pthread_mutex_unlock(&LOCK);
+    pthread_mutex_unlock(&MUL_LOCK);
 
     return NULL;
 }
@@ -263,7 +266,7 @@ void* MF2(void* A){
     int BRC = *(*((int**)A+2));
     int BCC = *(*((int**)A+5));
     
-    pthread_mutex_lock(&LOCK);
+    pthread_mutex_lock(&MUL_LOCK);
    
     int WorkingRowCount = ARC-returnRowCount(ARC);
 
@@ -275,14 +278,14 @@ void* MF2(void* A){
         }
     }
 
-    pthread_mutex_unlock(&LOCK);
+    pthread_mutex_unlock(&MUL_LOCK);
 
     return NULL;
 }
 
 void Multiply(void* DATA){
 
-    pthread_mutex_init(&LOCK,NULL);
+    pthread_mutex_init(&MUL_LOCK,NULL);
 
     pthread_t T1;
     pthread_t T2;
@@ -293,12 +296,12 @@ void Multiply(void* DATA){
     pthread_join(T1,NULL);
     pthread_join(T2,NULL);
 
-    pthread_mutex_destroy(&LOCK);
+    pthread_mutex_destroy(&MUL_LOCK);
 }
 
 void ScalarMul(void* DATA){
 
-    pthread_mutex_init(&LOCK,NULL);
+    pthread_mutex_init(&SCM_LOCK,NULL);
 
     pthread_t K1;
     pthread_t K2;
@@ -309,12 +312,12 @@ void ScalarMul(void* DATA){
     pthread_join(K1,NULL);
     pthread_join(K2,NULL);
 
-    pthread_mutex_destroy(&LOCK);
+    pthread_mutex_destroy(&SCM_LOCK);
 }
 
 void Add(void* DATA){
 
-    pthread_mutex_init(&LOCK,NULL);
+    pthread_mutex_init(&ADD_LOCK,NULL);
 
     pthread_t A1;
     pthread_t A2;
@@ -325,12 +328,12 @@ void Add(void* DATA){
     pthread_join(A1,NULL);
     pthread_join(A2,NULL);
 
-    pthread_mutex_destroy(&LOCK);
+    pthread_mutex_destroy(&ADD_LOCK);
 }
 
 void Sub(void* DATA){
 
-    pthread_mutex_init(&LOCK,NULL);
+    pthread_mutex_init(&SUB_LOCK,NULL);
 
     pthread_t A1;
     pthread_t A2;
@@ -341,48 +344,5 @@ void Sub(void* DATA){
     pthread_join(A1,NULL);
     pthread_join(A2,NULL);
 
-    pthread_mutex_destroy(&LOCK);
-}
-
-int main(void){
-
-    int A[5][5] = { 
-                    {1,2,3,4,5},
-                    {6,7,8,9,10},
-                    {11,12,13,14,15},
-                    {16,17,18,19,20},
-                    {21,22,23,24,25},
-
-    };
-
-    int B[5][5] = {
-                    {1,2,3,4,5},
-                    {6,7,8,9,10},
-                    {11,12,13,14,15},
-                    {16,17,18,19,20},
-                    {21,22,23,24,25}
-    };
-
-    int arc = sizeof(A)/sizeof(A[0]);
-    int acc = sizeof(A[0])/sizeof(A[0][0]);
-
-    int brc = sizeof(B)/sizeof(B[0]);
-    int bcc = sizeof(B[0])/sizeof(B[0][0]);
-
-    int RES[arc][bcc];
-    memset(RES, 0, sizeof(RES));
-    
-    void* DATA[7] = {
-                    &A[0][0],
-                    &B[0][0],
-                    &brc,
-                    &arc,
-                    &acc,
-                    &bcc,
-                    &RES[0][0]
-    };
-
-    Add(DATA);
-    display(&RES[0][0],arc,bcc);
-    return 0;
+    pthread_mutex_destroy(&SUB_LOCK);
 }
