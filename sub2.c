@@ -57,6 +57,28 @@ void* KM1(void* A){
     return NULL;
 }
 
+void* KM2(void* A){
+    int* A_RAY = *((int**)A+0);
+    int* R_RAY = *((int**)A+1);
+    
+    int KNT = *(*((int**)A+2));
+    int ARC = *(*((int**)A+3));
+    int ACC = *(*((int**)A+4));
+    
+    pthread_mutex_lock(&LOCK);
+    
+    int WRC = ARC-returnRowCount(ARC);
+    for(int i = WRC+1; i != ARC; i++){
+        for(int j = 0; j < ACC; j++){
+            R_RAY[i*ACC+j] = ((int)A_RAY[i*ACC+j])*(KNT);
+        }
+    }
+    
+    pthread_mutex_unlock(&LOCK);
+    
+    return NULL;
+}
+
 void* SF1(void* A){
     int* A_RAY = *((int**)A+0);
     int* B_RAY = *((int**)A+1);
@@ -270,6 +292,22 @@ void Multiply(void* DATA){
 
     pthread_join(T1,NULL);
     pthread_join(T2,NULL);
+
+    pthread_mutex_destroy(&LOCK);
+}
+
+void ScalarMul(void* DATA){
+
+    pthread_mutex_init(&LOCK,NULL);
+
+    pthread_t K1;
+    pthread_t K2;
+
+    pthread_create(&K1,NULL,KM1,DATA);
+    pthread_create(&K2,NULL,KM2,DATA);
+
+    pthread_join(K1,NULL);
+    pthread_join(K2,NULL);
 
     pthread_mutex_destroy(&LOCK);
 }
