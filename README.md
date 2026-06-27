@@ -1,20 +1,21 @@
 # MOprs : Multi-Threaded Matrix Operations 
 ## MOprs is a multi-threaded matrix operations library that I, Vinayak Singh, made from ground up.
 
+Licensed under GNU Affero General Public License, Version 3, 19 November 2007
+
 | File | Type | Category | 
 | ---- | ---- | -------- |
-| moprsth.c | Main Header file | Threaded Operations |
-| moprsnth.c | Old Header file | Non-threaded operations |
+| moprs.h | Header | threaded operations |
 
 ## Features:
 
-| S.No. | Operation |
-| ----- | --------- |
-| 1 | Display Matrices |
-| 2 | Multi-Threaded Multiplication |
-| 3 | Multi-Threaded Addition |
-| 4 | Multi-Threaded Subtraction |
-| 5 | Multi-Threaded Scalar Multiplication |
+| S.No. | Operation | Function Name |
+| ----- | --------- | ------------- |
+| 1 | Display Matrices | display() |
+| 2 | Multi-Threaded Multiplication | Multiply() |
+| 3 | Multi-Threaded Addition | Add() |
+| 4 | Multi-Threaded Subtraction | Sub() |
+| 5 | Multi-Threaded Scalar Multiplication | ScalarMul() |
 
 ## 1. Multi-Threaded Algebra 
 ### This method is fixed for:
